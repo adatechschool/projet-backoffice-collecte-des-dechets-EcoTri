@@ -5,11 +5,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id = (int) $_GET['id'];
 
     try {
-        $db = new PDO("mysql:host=localhost;dbname=gestion_collectes", "root", "root", [
+        $pdo = new PDO("mysql:host=localhost;dbname=gestion_collectes", "root", "root", [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
 
-        $stmt = $db->prepare("DELETE FROM benevoles WHERE id = :id");
+        $stmt = $pdo->prepare("DELETE FROM benevoles WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         if ($stmt->execute()) {

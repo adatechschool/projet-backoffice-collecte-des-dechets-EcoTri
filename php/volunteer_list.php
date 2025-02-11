@@ -3,7 +3,7 @@ require 'config.php';
 // On écrit notre requête
 $sql = 'SELECT * FROM `benevoles`';
 // On prépare la requête
-$query = $db->prepare($sql);
+$query = $pdo->prepare($sql);
 // On exécute la requête
 $query->execute();
 // On stocke le résultat dans un tableau associatif

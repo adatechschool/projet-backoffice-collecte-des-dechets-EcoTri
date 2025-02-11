@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $role = $_POST["role"];
     
     // Insérer la collecte avec le bénévole sélectionné
-    $sql = $db-> prepare("INSERT INTO benevoles(nom, email, mot_de_passe, role) VALUES ('$nom', '$email','$mot_de_passe','$role')");
+    $sql = $pdo-> prepare("INSERT INTO benevoles(nom, email, mot_de_passe, role) VALUES ('$nom', '$email','$mot_de_passe','$role')");
     $sql->execute();
 
     header("Location: volunteer_list.php");
