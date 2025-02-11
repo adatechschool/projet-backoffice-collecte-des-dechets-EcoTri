@@ -1,3 +1,15 @@
+<?php
+require 'config.php';
+// On écrit notre requête
+$sql = 'SELECT * FROM `benevoles`';
+// On prépare la requête
+$query = $db->prepare($sql);
+// On exécute la requête
+$query->execute();
+// On stocke le résultat dans un tableau associatif
+$result = $query->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -48,22 +60,33 @@
                     <th class="py-3 px-4 text-left">Actions</th>
                 </tr>
                 </thead>
+
+                
+
                 <tbody class="divide-y divide-gray-300">
+
+                <?php
+                    foreach($result as $benevoles){
+                ?>
+
                 <tr class="hover:bg-gray-100 transition duration-200">
-                    <td class="py-3 px-4">Nom du bénévole</td>
-                    <td class="py-3 px-4">email@example.com</td>
-                    <td class="py-3 px-4">Admin</td>
+                    <td class="py-3 px-4"><?= $benevoles['nom']?></td>
+                    <td class="py-3 px-4"><?= $benevoles['email']?></td>
+                    <td class="py-3 px-4"><?= $benevoles['role']?></td>
                     <td class="py-3 px-4 flex space-x-2">
                         <a href="#"
                            class="bg-cyan-200 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                             ✏️ Modifier
                         </a>
-                        <a href="#"
+                        <a href="volunteer_delete.php?id=<?= $benevoles['id'] ?>"
                            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200">
                             🗑️ Supprimer
                         </a>
                     </td>
                 </tr>
+                <?php
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -71,4 +94,3 @@
 </div>
 </body>
 </html>
-
