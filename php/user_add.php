@@ -1,3 +1,21 @@
+<?php
+require 'config.php';
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $nom = $_POST["nom"];
+    $email = $_POST["email"];
+    $mot_de_passe = $_POST["mot_de_passe"];
+    $role = $_POST["role"];
+    
+    // Insérer la collecte avec le bénévole sélectionné
+    $sql = $pdo-> prepare("INSERT INTO benevoles(nom, email, mot_de_passe, role) VALUES ('$nom', '$email','$mot_de_passe','$role')");
+    $sql->execute();
+
+    header("Location: volunteer_list.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -64,11 +82,19 @@
                             class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="participant">Participant</option>
                         <option value="admin">Admin</option>
+
+                        <!--<?php foreach ($benevoles as $benevole): ?>
+                            <option value="<?= $benevole['id'] ?>" <?= $benevole['id'] ==  'selected' ?>>
+                                <?= htmlspecialchars($benevole['nom']) ?>
+                            </option>
+                        <?php endforeach; ?>-->
+
                     </select>
                 </div>
 
                 <div class="mt-6">
-                    <button type="submit"
+                    <button
+                            type="submit"
                             class="w-full bg-cyan-200 hover:bg-cyan-600 text-white py-3 rounded-lg shadow-md font-semibold">
                         Ajouter le bénévole
                     </button>
@@ -77,7 +103,10 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>
+
+
+
+
 
