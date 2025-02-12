@@ -74,8 +74,7 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                     <td class="py-3 px-4"><?= $benevoles['email']?></td>
                     <td class="py-3 px-4"><?= $benevoles['role']?></td>
                     <td class="py-3 px-4 flex space-x-2">
-                        <a href="#"
-                           class="bg-cyan-200 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                    <a href="volunteer_edit.php?id=<?= $benevoles['id']?>"class="bg-cyan-200 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                             ✏️ Modifier
                         </a>
                         <a href="volunteer_delete.php?id=<?= $benevoles['id'] ?>"
