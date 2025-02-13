@@ -20,14 +20,14 @@ if (!$collecte) {
 }
 
 // Récupérer les informations de la collecte des déchets
-$stmt_dechets = $pdo->prepare("SELECT * FROM dechets_collectes WHERE id = ?");
-$stmt_dechets->execute([$id]);
-$dechets_collectes = $stmt_dechets->fetch();
+//$stmt_dechets = $pdo->prepare("SELECT * FROM dechets_collectes WHERE id = ?");
+//$stmt_dechets->execute([$id]);
+//$dechets_collectes = $stmt_dechets->fetch();
 
-if (!$collecte) {
-    header("Location: collection_list.php");
-    exit;
-}
+//if (!$collecte) {
+//    header("Location: collection_list.php");
+//    exit;
+//}
 
 // Récupérer la liste des bénévoles
 $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
@@ -38,12 +38,23 @@ $benevoles = $stmt_benevoles->fetchAll();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $date = $_POST["date"];
     $lieu = $_POST["lieu"];
-    $type_dechet = $_POST["type_dechet"];
-    $quantite_kg = $_POST["quantite_kg"];
     $benevole_id = $_POST["benevole"]; // Récupérer l'ID du bénévole sélectionné
 
-    $stmt = $pdo->prepare("UPDATE collectes SET date_collecte = ?, lieu = ?, type_dechet = ?, quantite_kg = ?, id_benevole = ? WHERE id = ?");
-    $stmt->execute([$date, $lieu, $type_dechet, $quantite_kg, $benevole_id, $id]);
+    $stmt = $pdo->prepare("UPDATE collectes SET date_collecte = ?, lieu = ?, id_benevole = ? WHERE id = ?");
+    $stmt->execute([$date, $lieu, $benevole_id, $id]);
+
+//     header("Location: collection_list.php");
+//     exit;
+// }
+
+//if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $type_dechet = $_POST["type_dechet"];
+    echo $type_dechet;
+    $quantite_kg = $_POST["quantite_kg"];
+    $id_collecte = $_GET["id"];
+
+    $stmt_dechets_collectes = $pdo->prepare("INSERT INTO dechets_collectes (type_dechet, quantite_kg, id_collecte) VALUES ('$type_dechet', '$quantite_kg', '$id_collecte')");
+    $stmt_dechets_collectes->execute();
 
     header("Location: collection_list.php");
     exit;
