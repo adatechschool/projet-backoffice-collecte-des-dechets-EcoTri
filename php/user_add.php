@@ -83,12 +83,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <option value="participant">Participant</option>
                         <option value="admin">Admin</option>
 
-                        <!--<?php foreach ($benevoles as $benevole): ?>
-                            <option value="<?= $benevole['id'] ?>" <?= $benevole['id'] ==  'selected' ?>>
-                                <?= htmlspecialchars($benevole['nom']) ?>
-                            </option>
-                        <?php endforeach; ?>-->
-
                     </select>
                 </div>
 
