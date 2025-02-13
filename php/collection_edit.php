@@ -19,6 +19,16 @@ if (!$collecte) {
     exit;
 }
 
+// Récupérer les informations de la collecte des déchets
+$stmt_dechets = $pdo->prepare("SELECT * FROM dechets_collectes WHERE id = ?");
+$stmt_dechets->execute([$id]);
+$dechets_collectes = $stmt_dechets->fetch();
+
+if (!$collecte) {
+    header("Location: collection_list.php");
+    exit;
+}
+
 // Récupérer la liste des bénévoles
 $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
 $stmt_benevoles->execute();
@@ -28,10 +38,12 @@ $benevoles = $stmt_benevoles->fetchAll();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $date = $_POST["date"];
     $lieu = $_POST["lieu"];
+    $type_dechet = $_POST["type_dechet"];
+    $quantite_kg = $_POST["quantite_kg"];
     $benevole_id = $_POST["benevole"]; // Récupérer l'ID du bénévole sélectionné
 
-    $stmt = $pdo->prepare("UPDATE collectes SET date_collecte = ?, lieu = ?, id_benevole = ? WHERE id = ?");
-    $stmt->execute([$date, $lieu, $benevole_id, $id]);
+    $stmt = $pdo->prepare("UPDATE collectes SET date_collecte = ?, lieu = ?, type_dechet = ?, quantite_kg = ?, id_benevole = ? WHERE id = ?");
+    $stmt->execute([$date, $lieu, $type_dechet, $quantite_kg, $benevole_id, $id]);
 
     header("Location: collection_list.php");
     exit;
@@ -86,6 +98,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="text" name="lieu" value="<?= htmlspecialchars($collecte['lieu']) ?>" required
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Type de déchets :</label>
+                    <input type="text" name="type_dechets" 
+                           class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Quantité :</label>
+                    <input type="text" name="quantite_kg" 
+                           class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
+
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Bénévole :</label>
                     <select name="benevole" required

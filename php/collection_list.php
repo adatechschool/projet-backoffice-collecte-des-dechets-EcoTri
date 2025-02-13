@@ -2,14 +2,14 @@
 require 'config.php';
 
 try {
-    $stmt = $db->query("
+    $stmt = $pdo->query("
         SELECT c.id, c.date_collecte, c.lieu, b.nom
         FROM collectes c
         LEFT JOIN benevoles b ON c.id_benevole = b.id
         ORDER BY c.date_collecte DESC
     ");
 
-    $query = $db->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");
+    $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");
     $query->execute();
 
     $collectes = $stmt->fetchAll();
