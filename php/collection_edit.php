@@ -116,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Type de déchets :</label>
-                    <input type="text" name="type_dechets" 
+                    <input type="text" name="type_dechet" 
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
                 <div>
