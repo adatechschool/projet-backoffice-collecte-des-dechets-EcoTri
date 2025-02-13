@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Récupérer la liste des bénévoles
-$stmt_benevoles = $db->query("SELECT id, nom FROM benevoles ORDER BY nom");
+$stmt_benevoles = $pdo->query("SELECT id, nom FROM benevoles ORDER BY nom");
 $stmt_benevoles->execute();
 $benevoles = $stmt_benevoles->fetchAll();
 
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $benevole_id = $_POST["benevole"];  // ID du bénévole choisi, modifié ici pour correspondre au formulaire
 
     // Insérer la collecte avec le bénévole sélectionné
-    $stmt = $db->prepare("INSERT INTO collectes (date_collecte, lieu, id_benevole) VALUES (?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO collectes (date_collecte, lieu, id_benevole) VALUES (?, ?, ?)");
     if (!$stmt->execute([$date, $lieu, $benevole_id])) {
         die('Erreur lors de l\'insertion dans la base de données.');
     }
