@@ -19,16 +19,6 @@ if (!$collecte) {
     exit;
 }
 
-// Récupérer les informations de la collecte des déchets
-//$stmt_dechets = $pdo->prepare("SELECT * FROM dechets_collectes WHERE id = ?");
-//$stmt_dechets->execute([$id]);
-//$dechets_collectes = $stmt_dechets->fetch();
-
-//if (!$collecte) {
-//    header("Location: collection_list.php");
-//    exit;
-//}
-
 // Récupérer la liste des bénévoles
 $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
 $stmt_benevoles->execute();
@@ -43,13 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt = $pdo->prepare("UPDATE collectes SET date_collecte = ?, lieu = ?, id_benevole = ? WHERE id = ?");
     $stmt->execute([$date, $lieu, $benevole_id, $id]);
 
-//     header("Location: collection_list.php");
-//     exit;
-// }
-
-//if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $type_dechet = $_POST["type_dechet"];
-    echo $type_dechet;
+    
     $quantite_kg = $_POST["quantite_kg"];
     $id_collecte = $_GET["id"];
 
@@ -59,10 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Location: collection_list.php");
     exit;
 }
-
-
-//Ajouter la quantité et type de déchets dans la collecte_list à partir de bdd déchets collecte
-
 
 ?>
 
