@@ -24,7 +24,7 @@ $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
 $stmt_benevoles->execute();
 $benevoles = $stmt_benevoles->fetchAll();
 
-// Mettre à jour la collecte
+// Mettre à jour la collecte_list
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $date = $_POST["date"];
     $lieu = $_POST["lieu"];
@@ -36,6 +36,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Location: collection_list.php");
     exit;
 }
+
+
+//Ajouter la quantité et type de déchets dans la collecte_list à partir de bdd déchets collecte
+
+
 ?>
 
 <!DOCTYPE html>
