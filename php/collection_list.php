@@ -3,10 +3,11 @@ require 'config.php';
 
 try {
     $stmt = $pdo->query("
-        SELECT c.id, c.date_collecte, c.lieu, b.nom
-        FROM collectes c
-        LEFT JOIN benevoles b ON c.id_benevole = b.id
-        ORDER BY c.date_collecte DESC
+        SELECT * FROM `collectes`
+        INNER JOIN `benevoles`
+        ON benevoles.id = collectes.id_benevole
+        INNER JOIN `dechets_collectes`
+        ON collectes.id = dechets_collectes.id_collecte;
     ");
 
     $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");
@@ -95,7 +96,9 @@ error_reporting(E_ALL);
                     <th class="py-3 px-4 text-left">Date</th>
                     <th class="py-3 px-4 text-left">Lieu</th>
                     <th class="py-3 px-4 text-left">Bénévole Responsable</th>
-                    <th class="py-3 px-4 text-left">Actions</th>
+                    <th class="py-3 px-4 text-left">Type de déchet</th>
+                    <th class="py-3 px-4 text-left">Quantité</th>
+                    <th class="py-3 px-4 text-left flex justify-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-300">
@@ -106,7 +109,11 @@ error_reporting(E_ALL);
                         <td class="py-3 px-4">
                             <?= $collecte['nom'] ? htmlspecialchars($collecte['nom']) : 'Aucun bénévole' ?>
                         </td>
-                        <td class="py-3 px-4 flex space-x-2">
+                   
+                        <td class="py-3 px-4"><?= htmlspecialchars($collecte['type_dechet']) ?></td>
+                        <td class="py-3 px-4"><?= htmlspecialchars($collecte['quantite_kg']) ?></td>
+                        
+                        <td class="py-3 px-4 flex space-x-1 justify-center">
                             <a href="collection_edit.php?id=<?= $collecte['id'] ?>" class="bg-cyan-200 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                                 ✏️ Modifier
                             </a>
