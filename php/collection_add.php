@@ -20,6 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die('Erreur lors de l\'insertion dans la base de données.');
     }
 
+    $type_dechet = $_POST["type_dechet"];
+    $quantite_kg = $_POST["quantite_kg"];
+    $id_collecte = $pdo->lastInsertId();
+
+    $stmt_dechets_collectes = $pdo->prepare("INSERT INTO dechets_collectes (type_dechet, quantite_kg,id_collecte) VALUES ('$type_dechet', '$quantite_kg', '$id_collecte')");
+    $stmt_dechets_collectes->execute();
+
     header("Location: collection_list.php");
     exit;
 }
@@ -77,7 +84,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="text" name="lieu" required
                            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                 </div>
+                <!--type dechet et quantite-->
+                <div>
+                <label class="block text-md font-medium text-gray-700">Type de déchet :</label>
+                <select name="type_dechet" required
+                        class="w-full p-2 border border-gray-300 rounded-lg">
+                        <option value="" disabled selected>Sélectionnez un type de déchet</option>
+                        <option value="plastique">Plastique</option>
+                        <option value="verre" >Verre</option>
+                        <option value="metal" >Métal</option>
+                        <option value="papier" >Papier</option>
+                        <option value="organique" >Organique</option>
+                    </select>
+                </div>
 
+                <div>
+                    <label class="block text-md font-medium text-gray-700">Quantité :</label>
+                    <input type="text" name="quantite_kg" 
+                           class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
                 <!-- Bénévole responsable -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Bénévole Responsable :</label>
