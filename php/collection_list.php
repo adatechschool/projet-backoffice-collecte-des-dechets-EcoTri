@@ -13,10 +13,13 @@ try {
     $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");
     $query->execute();
 
-
     $collectes = $stmt->fetchAll();
     $admin = $query->fetch(PDO::FETCH_ASSOC);
     $adminNom = $admin ? htmlspecialchars($admin['nom']) : 'Aucun administrateur trouvé';
+
+    $totalDechets = $pdo->prepare("SELECT quantite_kg FROM dechets_collectes");
+    $totalDechets->execute();
+    $dechets = $totalDechets->fetchAll(PDO::FETCH_COLUMN);
 
 } catch (PDOException $e) {
     echo "Erreur de base de données : " . $e->getMessage();
@@ -79,7 +82,7 @@ error_reporting(E_ALL);
             <!-- Nombre total déchets collectés -->
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <h3 class="text-xl font-semibold text-gray-800 mb-3">Total déchets collectés</h3>
-                <p class="text-3xl font-bold text-blue-600">
+                <p class="text-3xl font-bold text-blue-600"><?= array_sum($dechets) ?>
             </div>
 
             <!-- Dernière collecte -->
