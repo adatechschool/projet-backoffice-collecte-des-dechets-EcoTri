@@ -1,7 +1,14 @@
 <?php
 require 'config.php';
-// On écrit notre requête
-$sql = 'SELECT * FROM `benevoles`';
+// Requête SQL pour récupérer les bénévoles avec la quantité totale de déchets collectés
+$sql = '
+    SELECT benevoles.id, benevoles.nom, benevoles.email, benevoles.role, 
+           ROUND(SUM(COALESCE(dechets_collectes.quantite_kg, 0)), 3) AS QTÉ_Totale
+    FROM benevoles
+    LEFT JOIN collectes ON benevoles.id = collectes.id_benevole
+    LEFT JOIN dechets_collectes ON collectes.id = dechets_collectes.id_collecte
+    GROUP BY benevoles.id, benevoles.nom, benevoles.email, benevoles.role
+';
 // On prépare la requête
 $query = $pdo->prepare($sql);
 // On exécute la requête
@@ -57,24 +64,23 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                     <th class="py-3 px-4 text-left">Nom</th>
                     <th class="py-3 px-4 text-left">Email</th>
                     <th class="py-3 px-4 text-left">Rôle</th>
+                    <th class="py-3 px-4 text-left">Qté collectée</th> <!-- Nouvelle colonne -->
                     <th class="py-3 px-4 text-left">Actions</th>
                 </tr>
                 </thead>
 
-                
-
                 <tbody class="divide-y divide-gray-300">
-
                 <?php
                     foreach($result as $benevoles){
                 ?>
 
                 <tr class="hover:bg-gray-100 transition duration-200">
-                    <td class="py-3 px-4"><?= $benevoles['nom']?></td>
-                    <td class="py-3 px-4"><?= $benevoles['email']?></td>
-                    <td class="py-3 px-4"><?= $benevoles['role']?></td>
+                    <td class="py-3 px-4"><?= htmlspecialchars($benevoles['nom'], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td class="py-3 px-4"><?= htmlspecialchars($benevoles['email'], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td class="py-3 px-4"><?= htmlspecialchars($benevoles['role'], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td class="py-3 px-4"><?= htmlspecialchars($benevoles['QTÉ_Totale'], ENT_QUOTES, 'UTF-8') ?> kg</td> <!-- Affichage de QTÉ -->
                     <td class="py-3 px-4 flex space-x-2">
-                    <a href="volunteer_edit.php?id=<?= $benevoles['id']?>"class="bg-cyan-200 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                    <a href="volunteer_edit.php?id=<?= $benevoles['id']?>" class="bg-cyan-200 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                             ✏️ Modifier
                         </a>
                         <a href="volunteer_delete.php?id=<?= $benevoles['id'] ?>"
@@ -85,7 +91,7 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
                 <?php
                     }
-                    ?>
+                ?>
                 </tbody>
             </table>
         </div>
