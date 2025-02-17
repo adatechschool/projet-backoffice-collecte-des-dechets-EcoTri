@@ -114,7 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="text" name="lieu" value="<?= htmlspecialchars($collecte['lieu']) ?>" required
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
-<<<<<<< HEAD
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Type de déchets collectés :</label>
@@ -132,15 +131,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         value="<?= htmlspecialchars($collecte['quantite_kg']) ?>" 
                         class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
-
-                <div>
-=======
-                <!-- <div>
->>>>>>> ajouterQuantiteTypeDechets
-                    <label class="block text-sm font-medium text-gray-700">Type de déchets :</label>
-                    <input type="text" name="type_dechet" 
-                           class="w-full p-2 border border-gray-300 rounded-lg">
-                </div> -->
 
                 <div>
                 <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
