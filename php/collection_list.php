@@ -7,7 +7,8 @@ try {
         INNER JOIN `benevoles`
         ON benevoles.id = collectes.id_benevole
         INNER JOIN `dechets_collectes`
-        ON collectes.id = dechets_collectes.id_collecte;
+        ON collectes.id = dechets_collectes.id_collecte
+        ORDER BY collectes.date_collecte ASC;
     ");
 
     $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");

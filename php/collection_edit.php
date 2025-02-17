@@ -10,7 +10,21 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $id = $_GET['id'];
 
 // Récupérer les informations de la collecte
-$stmt = $pdo->prepare("SELECT * FROM collectes WHERE id = ?");
+$stmt = $pdo->prepare("
+SELECT 
+	dechets_collectes.id,
+	dechets_collectes.type_dechet,
+    dechets_collectes.quantite_kg,
+ 	collectes.date_collecte,
+    collectes.lieu,
+    collectes.id_benevole,
+    collectes.id AS collecte_id,
+    benevoles.nom
+FROM `dechets_collectes`
+INNER JOIN collectes  ON dechets_collectes.id_collecte = collectes.id
+INNER JOIN benevoles ON collectes.id_benevole = benevoles.id
+WHERE dechets_collectes.id = ?
+");
 $stmt->execute([$id]);
 $collecte = $stmt->fetch();
 
@@ -30,8 +44,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $lieu = $_POST["lieu"];
     $benevole_id = $_POST["benevole"]; // Récupérer l'ID du bénévole sélectionné
 
-    $stmt = $pdo->prepare("UPDATE collectes SET date_collecte = ?, lieu = ?, id_benevole = ? WHERE id = ?");
-    $stmt->execute([$date, $lieu, $benevole_id, $id]);
+    $stmt = $pdo->prepare("
+    UPDATE collectes
+    SET collectes.date_collecte = ?,
+        collectes.lieu = ?,
+        collectes.id_benevole = ?
+    WHERE collectes.id = ?
+    ");
+    $stmt->execute([$date, $lieu, $benevole_id, $collecte['collecte_id']]);
 
     $type_dechet = $_POST["type_dechet"];
     
@@ -56,7 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
-
 <div class="flex h-screen">
     <!-- Dashboard -->
     <div class="bg-cyan-200 text-white w-64 p-6">
@@ -95,6 +114,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="text" name="lieu" value="<?= htmlspecialchars($collecte['lieu']) ?>" required
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Type de déchets collectés :</label>
+                    <input 
+                        type="text"
+                        name=""
+                        value="<?= htmlspecialchars($collecte['type_dechet']) ?>" 
+                           class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Quantité collectée :</label>
+                    <input 
+                        type="text" 
+                        name=""
+                        value="<?= htmlspecialchars($collecte['quantite_kg']) ?>" 
+                        class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
+
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Type de déchets :</label>
                     <input type="text" name="type_dechet" 
