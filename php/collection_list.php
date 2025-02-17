@@ -7,7 +7,8 @@ try {
         INNER JOIN `benevoles`
         ON benevoles.id = collectes.id_benevole
         INNER JOIN `dechets_collectes`
-        ON collectes.id = dechets_collectes.id_collecte;
+        ON collectes.id = dechets_collectes.id_collecte
+        ORDER BY collectes.date_collecte ASC;
     ");
 
     $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");
@@ -17,6 +18,9 @@ try {
     $admin = $query->fetch(PDO::FETCH_ASSOC);
     $adminNom = $admin ? htmlspecialchars($admin['nom']) : 'Aucun administrateur trouvé';
 
+    $totalDechets = $pdo->prepare("SELECT quantite_kg FROM dechets_collectes");
+    $totalDechets->execute();
+    $dechets = $totalDechets->fetchAll(PDO::FETCH_COLUMN);
 } catch (PDOException $e) {
     echo "Erreur de base de données : " . $e->getMessage();
     exit;
@@ -42,15 +46,15 @@ error_reporting(E_ALL);
 <body class="bg-gray-100 text-gray-900">
 <div class="flex h-screen">
     <!-- Barre de navigation -->
-    <div class="bg-cyan-200 text-white w-64 p-6">
-        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
-            <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
-            <li><a href="collection_add.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-plus-circle mr-3"></i> Ajouter une collecte</a></li>
-            <li><a href="volunteer_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fa-solid fa-list mr-3"></i> Liste des bénévoles</a></li>
-            <li><a href="user_add.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-user-plus mr-3"></i> Ajouter un bénévole</a></li>
-            <li><a href="my_account.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-cogs mr-3"></i> Mon compte</a></li>
+    <div class="bg-blue-200 text-slate-900 w-100 p-6">
+        <h2 class=" font-serif justify-center text-2xl font-bold mb-6 mt-10 px-3">Dashboard</h2>
+            <li class = "list-none" ><a href="collection_list.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
+            <li class = "list-none"><a href="collection_add.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-plus-circle mr-3"></i> Ajouter une collecte</a></li>
+            <li class = "list-none"><a href="volunteer_list.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fa-solid fa-list mr-3"></i> Liste des bénévoles</a></li>
+            <li class = "list-none"><a href="user_add.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-user-plus mr-3"></i> Ajouter un bénévole</a></li>
+            <li class = "list-none"><a href="my_account.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-cogs mr-3"></i> Mon compte</a></li>
         <div class="mt-6">
-            <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg shadow-md">
+            <button onclick="logout()" class="text-xl w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-lg shadow-md">
                 Déconnexion
             </button>
         </div>
@@ -74,6 +78,11 @@ error_reporting(E_ALL);
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <h3 class="text-xl font-semibold text-gray-800 mb-3">Total des Collectes</h3>
                 <p class="text-3xl font-bold text-blue-600"><?= count($collectes) ?></p>
+            </div>
+               <!-- Nombre total déchets collectés -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Total déchets collectés</h3>
+                <p class="text-3xl font-bold text-blue-600"><?= array_sum($dechets) ?>
             </div>
             <!-- Dernière collecte -->
             <div class="bg-white p-6 rounded-lg shadow-lg">

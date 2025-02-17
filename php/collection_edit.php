@@ -10,24 +10,29 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $id = $_GET['id'];
 
 // Récupérer les informations de la collecte
-$stmt = $pdo->prepare("SELECT * FROM collectes WHERE id = ?");
+$stmt = $pdo->prepare("
+SELECT 
+	dechets_collectes.id,
+	dechets_collectes.type_dechet,
+    dechets_collectes.quantite_kg,
+ 	collectes.date_collecte,
+    collectes.lieu,
+    collectes.id_benevole,
+    collectes.id AS collecte_id,
+    benevoles.nom
+FROM `dechets_collectes`
+INNER JOIN collectes  ON dechets_collectes.id_collecte = collectes.id
+INNER JOIN benevoles ON collectes.id_benevole = benevoles.id
+WHERE dechets_collectes.id = ?
+");
 $stmt->execute([$id]);
 $collecte = $stmt->fetch();
+//var_dump($collecte); exit;
 
 if (!$collecte) {
     header("Location: collection_list.php");
     exit;
 }
-
-// Récupérer les informations de la collecte des déchets
-//$stmt_dechets = $pdo->prepare("SELECT * FROM dechets_collectes WHERE id = ?");
-//$stmt_dechets->execute([$id]);
-//$dechets_collectes = $stmt_dechets->fetch();
-
-//if (!$collecte) {
-//    header("Location: collection_list.php");
-//    exit;
-//}
 
 // Récupérer la liste des bénévoles
 $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
@@ -40,29 +45,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $lieu = $_POST["lieu"];
     $benevole_id = $_POST["benevole"]; // Récupérer l'ID du bénévole sélectionné
 
-    $stmt = $pdo->prepare("UPDATE collectes SET date_collecte = ?, lieu = ?, id_benevole = ? WHERE id = ?");
-    $stmt->execute([$date, $lieu, $benevole_id, $id]);
+    $stmt = $pdo->prepare("
+    UPDATE collectes
+    SET collectes.date_collecte = ?,
+        collectes.lieu = ?,
+        collectes.id_benevole = ?
+    WHERE collectes.id = ?
+    ");
+    $stmt->execute([$date, $lieu, $benevole_id, $collecte['collecte_id']]);
 
-//     header("Location: collection_list.php");
-//     exit;
-// }
-
-//if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $type_dechet = $_POST["type_dechet"];
-    echo $type_dechet;
     $quantite_kg = $_POST["quantite_kg"];
     $id_collecte = $_GET["id"];
 
     $stmt_dechets_collectes = $pdo->prepare("INSERT INTO dechets_collectes (type_dechet, quantite_kg, id_collecte) VALUES ('$type_dechet', '$quantite_kg', '$id_collecte')");
     $stmt_dechets_collectes->execute();
-
+    
     header("Location: collection_list.php");
     exit;
 }
-
-
-//Ajouter la quantité et type de déchets dans la collecte_list à partir de bdd déchets collecte
-
 
 ?>
 
@@ -73,25 +74,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier une collecte</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+
 </head>
 <body class="bg-gray-100 text-gray-900">
-
 <div class="flex h-screen">
     <!-- Dashboard -->
-    <div class="bg-cyan-200 text-white w-64 p-6">
-        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+    <div class="bg-blue-200 text-black w-100 p-6">
+        <h2 class="font-serif justify-center text-2xl font-bold mb-6 mt-10 px-3">Dashboard</h2>
 
-            <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
-            <li><a href="volunteer_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fa-solid fa-list mr-3"></i> Liste des bénévoles</a></li>
-            <li>
-                <a href="user_add.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg">
+            <li class = "list-none" ><a href="collection_list.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
+            <li class = "list-none" ><a href="volunteer_list.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fa-solid fa-list mr-3"></i> Liste des bénévoles</a></li>
+            <li class = "list-none" >
+                <a href="user_add.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg">
                     <i class="fas fa-user-plus mr-3"></i> Ajouter un bénévole
                 </a>
             </li>
-            <li><a href="my_account.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-cogs mr-3"></i> Mon compte</a></li>
+            <li class = "list-none" ><a href="my_account.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-cogs mr-3"></i> Mon compte</a></li>
 
         <div class="mt-6">
-            <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg shadow-md">
+            <button onclick="logout()" class="text-xl w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-lg shadow-md">
                 Déconnexion
             </button>
         </div>
@@ -114,11 +116,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="text" name="lieu" value="<?= htmlspecialchars($collecte['lieu']) ?>" required
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
+
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Type de déchets :</label>
-                    <input type="text" name="type_dechet" 
+                    <label class="block text-sm font-medium text-gray-700">Type de déchets collectés :</label>
+                    <input 
+                        type="text"
+                        name=""
+                        value="<?= htmlspecialchars($collecte['type_dechet']) ?>" 
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Quantité collectée :</label>
+                    <input 
+                        type="text" 
+                        name=""
+                        value="<?= htmlspecialchars($collecte['quantite_kg']) ?>" 
+                        class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
+
+                <div>
+                <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
+                <select name="type_dechet" required
+                        class="w-full p-2 border border-gray-300 rounded-lg">
+                        <option value="" disabled selected>Sélectionnez un type de déchet</option>
+                        <option value="plastique">Plastique</option>
+                        <option value="verre" >Verre</option>
+                        <option value="metal" >Métal</option>
+                        <option value="papier" >Papier</option>
+                        <option value="organique" >Organique</option>
+                    </select>
+                </div>
+
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Quantité :</label>
                     <input type="text" name="quantite_kg" 
