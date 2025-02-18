@@ -8,13 +8,14 @@ try {
         ON benevoles.id = collectes.id_benevole
         INNER JOIN `dechets_collectes`
         ON collectes.id = dechets_collectes.id_collecte
-        ORDER BY collectes.date_collecte ASC;
+        ORDER BY collectes.date_collecte DESC;
     ");
 
     $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");
     $query->execute();
 
     $collectes = $stmt->fetchAll();
+    
     $admin = $query->fetch(PDO::FETCH_ASSOC);
     $adminNom = $admin ? htmlspecialchars($admin['nom']) : 'Aucun administrateur trouvé';
 
@@ -73,7 +74,7 @@ error_reporting(E_ALL);
         <?php endif; ?>
 
         <!-- Cartes d'informations -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-2 gap-6 mb-8">
             <!-- Nombre total de collectes -->
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <h3 class="text-xl font-semibold text-gray-800 mb-3">Total des Collectes</h3>

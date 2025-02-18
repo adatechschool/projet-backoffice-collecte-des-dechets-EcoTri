@@ -64,7 +64,7 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                     <th class="py-3 px-4 text-left">Nom</th>
                     <th class="py-3 px-4 text-left">Email</th>
                     <th class="py-3 px-4 text-left">Rôle</th>
-                    <th class="py-3 px-4 text-left">Qté collectée</th> <!-- Nouvelle colonne -->
+                    <th class="py-3 px-4 text-left">Quantité collectée</th> <!-- Nouvelle colonne -->
                     <th class="py-3 px-4 text-left">Actions</th>
                 </tr>
                 </thead>
