@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <!-- Contenu principal -->
     <div class="flex-1 p-8 overflow-y-auto">
-        <h1 class="text-4xl font-bold text-blue-800 mb-6">Ajouter un Bénévole</h1>
+        <h1 class="text-4xl font-bold text-blue-900 mb-6">Ajouter un Bénévole</h1>
 
         <!-- Formulaire d'ajout -->
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <div class="mt-6">
                     <button
                             type="submit"
-                            class="w-full bg-cyan-200 hover:bg-cyan-600 text-white py-3 rounded-lg shadow-md font-semibold">
+                            class="w-full bg-blue-400 hover:bg-blue-500 text-white py-3 rounded-lg shadow-md font-semibold">
                         Ajouter le bénévole
                     </button>
                 </div>
