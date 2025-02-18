@@ -20,6 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die('Erreur lors de l\'insertion dans la base de données.');
     }
 
+    $type_dechet = $_POST["type_dechet"];
+    $quantite_kg = $_POST["quantite_kg"];
+    $id_collecte = $pdo->lastInsertId();
+
+    $stmt_dechets_collectes = $pdo->prepare("INSERT INTO dechets_collectes (type_dechet, quantite_kg,id_collecte) VALUES ('$type_dechet', '$quantite_kg', '$id_collecte')");
+    $stmt_dechets_collectes->execute();
+
     header("Location: collection_list.php");
     exit;
 }
@@ -37,20 +44,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body class="bg-gray-100 text-gray-900">
 
 <div class="flex h-screen">
-    <div class="bg-cyan-200 text-white w-64 p-6">
-        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+    <div class="bg-blue-200 text-black w-100 p-6">
+        <h2 class="font-serif justify-center text-2xl font-bold mb-6 mt-10 px-3">Dashboard</h2>
 
-            <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
-            <li><a href="volunteer_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fa-solid fa-list mr-3"></i> Liste des bénévoles</a></li>
-            <li>
-                <a href="user_add.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg">
+            <li class = "list-none"><a href="collection_list.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
+            <li class = "list-none"><a href="volunteer_list.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fa-solid fa-list mr-3"></i> Liste des bénévoles</a></li>
+            <li class = "list-none">
+                <a href="user_add.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg">
                     <i class="fas fa-user-plus mr-3"></i> Ajouter un bénévole
                 </a>
             </li>
-            <li><a href="my_account.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-cogs mr-3"></i> Mon compte</a></li>
+            <li class = "list-none"><a href="my_account.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-cogs mr-3"></i> Mon compte</a></li>
 
         <div class="mt-6">
-            <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg shadow-md">
+            <button onclick="logout()" class="text-xl w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-lg shadow-md">
                 Déconnexion
             </button>
         </div>
@@ -77,7 +84,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="text" name="lieu" required
                            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                 </div>
+                <!--type dechet et quantite-->
+                <div>
+                <label class="block text-md font-medium text-gray-700">Type de déchet :</label>
+                <select name="type_dechet" required
+                        class="w-full p-2 border border-gray-300 rounded-lg">
+                        <option value="" disabled selected>Sélectionnez un type de déchet</option>
+                        <option value="plastique">Plastique</option>
+                        <option value="verre" >Verre</option>
+                        <option value="metal" >Métal</option>
+                        <option value="papier" >Papier</option>
+                        <option value="organique" >Organique</option>
+                    </select>
+                </div>
 
+                <div>
+                    <label class="block text-md font-medium text-gray-700">Quantité :</label>
+                    <input type="text" name="quantite_kg" 
+                           class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
                 <!-- Bénévole responsable -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Bénévole Responsable :</label>
