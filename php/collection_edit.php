@@ -34,9 +34,9 @@ if (!$collecte) {
     exit;
 }
 //récupérer la liste des types déchets
-$stmt_dechets_collectes = $pdo->prepare("SELECT type_dechet,id , id_collecte FROM dechets_collectes");
-$stmt_dechets_collectes->execute();
-$type_dechets = $stmt_dechets_collectes->fetchAll();
+$stmt_dechet_collectes = $pdo->prepare("SELECT id, id_collecte,type_dechet FROM dechets_collectes");
+$stmt_dechet_collectes->execute();
+$type_dechets = $stmt_dechet_collectes->fetchAll();
 
 // Récupérer la liste des bénévoles
 $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
@@ -108,11 +108,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
 
     <!-- Contenu principal -->
-    <div class="flex-1  items-center p-10 pt-10 overflow-y-auto">
-        <h1 class="text-4xl font-bold text-blue-900 mb-6">Modifier une collecte</h1>
+    <div class="flex-1 p-10 overflow-y-auto mt-20">
+        <h1 class="text-4xl font-bold text-blue-900 mb-6  max-w-lg mx-auto">Modifier une collecte</h1>
 
         <!-- Formulaire -->
-        <div class="w-400 bg-white p-6 rounded-lg shadow-lg">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
             <form method="POST" class="space-y-4 grid grid-cols-2 gap-4">
                 <div class = "col-span-2">
                     <label class="block text-md font-medium text-gray-700"> Date :</label>
@@ -125,25 +125,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
 
-                <!--<div>
-                    <label class="block text-md font-medium text-gray-700">Type de déchets collectés :</label>
-                    <input 
-                        type="text"
-                        name="type_dechet"
-                        value="<?= htmlspecialchars($collecte['type_dechet']) ?>" 
-                           class="w-full p-2 border border-gray-300 rounded-lg">
-                </div>-->
-
                 <div>
                 <label class="block text-md font-medium text-gray-700">Type de déchet collecté:</label>
                 <select name="type_dechet" required
                         class="w-full p-2 border border-gray-300 rounded-lg">
                         <option value="" disabled selected>Sélectionnez un type de déchet</option>
+
                         <?php foreach ($type_dechets as $type_dechet): ?>
-                            <option value="<?= htmlspecialchars($type_dechet['type_dechet']) ?>" <?= $type_dechet['id_collecte'] == $collecte['id'] ? 'selected' : '' ?>>
+                            <option value="<?= $type_dechet['type_dechet'] ?>" <?= $type_dechet['id'] == $collecte['id'] ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($type_dechet['type_dechet']) ?>
                             </option>
                         <?php endforeach; ?>
+
                     </select>
                 </div>
 
@@ -155,19 +148,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         value="<?= htmlspecialchars($collecte['quantite_kg']) ?>" 
                         class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
-
-                <!--<div>
-                <label class="block text-md font-medium text-gray-700">Type de déchet :</label>
-                <select name="type_dechet" required
-                        class="w-full p-2 border border-gray-300 rounded-lg">
-                        <option value="" disabled selected>Sélectionnez un type de déchet</option>
-                        <option value="plastique">Plastique</option>
-                        <option value="verre" >Verre</option>
-                        <option value="metal" >Métal</option>
-                        <option value="papier" >Papier</option>
-                        <option value="organique" >Organique</option>
-                    </select>
-                </div>-->
 
                 <div class = "col-span-2">
                     <label class="block text-md font-medium text-gray-700">Bénévole :</label>
@@ -181,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="flex justify-end space-x-4">
+                <div class="flex justify-center space-x-4">
                     <a href="collection_list.php" class="bg-gray-500 text-white px-4 py-2 rounded-lg">Annuler</a>
                     <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg">Modifier</button>
                 </div>

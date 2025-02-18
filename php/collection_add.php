@@ -64,12 +64,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
 
     <!-- Contenu principal -->
-    <div class="flex-1 p-8 overflow-y-auto">
+    <div class="flex-1 p-8 overflow-y-auto mt-20">
         <!-- Titre -->
-        <h1 class="text-4xl font-bold text-blue-900 mb-6">Ajouter une collecte</h1>
+        <h1 class="text-4xl font-bold text-blue-900 mb-6  max-w-lg mx-auto">Ajouter une collecte</h1>
 
         <!-- Formulaire -->
-        <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="bg-white p-6 rounded-lg shadow-lg  max-w-lg mx-auto">
             <form method="POST" class="space-y-4">
                 <!-- Date -->
                 <div>
@@ -90,11 +90,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <select name="type_dechet" required
                         class="w-full p-2 border border-gray-300 rounded-lg">
                         <option value="" disabled selected>Sélectionnez un type de déchet</option>
-                        <option value="plastique">Plastique</option>
-                        <option value="verre" >Verre</option>
-                        <option value="metal" >Métal</option>
-                        <option value="papier" >Papier</option>
-                        <option value="organique" >Organique</option>
+                        <option value="plastique">plastique</option>
+                        <option value="verre" >verre</option>
+                        <option value="metal" >métal</option>
+                        <option value="papier" >papier</option>
+                        <option value="organique" >organique</option>
                     </select>
                 </div>
 
