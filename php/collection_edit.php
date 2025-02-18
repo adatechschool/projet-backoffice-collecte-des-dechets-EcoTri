@@ -27,7 +27,7 @@ WHERE dechets_collectes.id = ?
 ");
 $stmt->execute([$id]);
 $collecte = $stmt->fetch();
-//var_dump($collecte); exit;
+
 
 if (!$collecte) {
     header("Location: collection_list.php");
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $date = $_POST["date"];
     $lieu = $_POST["lieu"];
     $benevole_id = $_POST["benevole"]; // Récupérer l'ID du bénévole sélectionné
-
+    
     $stmt = $pdo->prepare("
     UPDATE collectes
     SET collectes.date_collecte = ?,
@@ -56,10 +56,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $type_dechet = $_POST["type_dechet"];
     $quantite_kg = $_POST["quantite_kg"];
-    $id_collecte = $_GET["id"];
 
-    $stmt_dechets_collectes = $pdo->prepare("INSERT INTO dechets_collectes (type_dechet, quantite_kg, id_collecte) VALUES ('$type_dechet', '$quantite_kg', '$id_collecte')");
-    $stmt_dechets_collectes->execute();
+    $stmt_dechets_collectes = $pdo->prepare("
+    UPDATE dechets_collectes
+    SET dechets_collectes.type_dechet = ?,
+        dechets_collectes.quantite_kg = ?
+    WHERE dechets_collectes.id = ?
+    ");
+    $stmt_dechets_collectes->execute([$type_dechet, $quantite_kg,$collecte['id']]);
     
     header("Location: collection_list.php");
     exit;
@@ -100,42 +104,42 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
 
     <!-- Contenu principal -->
-    <div class="flex-1 p-8 overflow-y-auto">
+    <div class="flex-1  items-center p-10 pt-10 overflow-y-auto">
         <h1 class="text-4xl font-bold text-blue-900 mb-6">Modifier une collecte</h1>
 
         <!-- Formulaire -->
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-            <form method="POST" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Date :</label>
+        <div class="w-400 bg-white p-6 rounded-lg shadow-lg">
+            <form method="POST" class="space-y-4 grid grid-cols-2 gap-4">
+                <div class = "col-span-2">
+                    <label class="block text-md font-medium text-gray-700"> Date :</label>
                     <input type="date" name="date" value="<?= htmlspecialchars($collecte['date_collecte']) ?>" required
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Lieu :</label>
+                <div class = "col-span-2">
+                    <label class="block text-md font-medium text-gray-700">Lieu :</label>
                     <input type="text" name="lieu" value="<?= htmlspecialchars($collecte['lieu']) ?>" required
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Type de déchets collectés :</label>
+                    <label class="block text-md font-medium text-gray-700">Type de déchets collectés :</label>
                     <input 
                         type="text"
-                        name=""
+                        name="type_dechet"
                         value="<?= htmlspecialchars($collecte['type_dechet']) ?>" 
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Quantité collectée :</label>
+                    <label class="block text-md font-medium text-gray-700">Quantité collectée :</label>
                     <input 
                         type="text" 
-                        name=""
+                        name="quantite_kg"
                         value="<?= htmlspecialchars($collecte['quantite_kg']) ?>" 
                         class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
 
-                <div>
-                <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
+                <!--<div>
+                <label class="block text-md font-medium text-gray-700">Type de déchet :</label>
                 <select name="type_dechet" required
                         class="w-full p-2 border border-gray-300 rounded-lg">
                         <option value="" disabled selected>Sélectionnez un type de déchet</option>
@@ -148,13 +152,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Quantité :</label>
+                    <label class="block text-md font-medium text-gray-700">Quantité :</label>
                     <input type="text" name="quantite_kg" 
                            class="w-full p-2 border border-gray-300 rounded-lg">
-                </div>
+                </div>-->
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Bénévole :</label>
+                <div class = "col-span-2">
+                    <label class="block text-md font-medium text-gray-700">Bénévole :</label>
                     <select name="benevole" required
                             class="w-full p-2 border border-gray-300 rounded-lg">
                         <option value="" disabled selected>Sélectionnez un·e bénévole</option>
