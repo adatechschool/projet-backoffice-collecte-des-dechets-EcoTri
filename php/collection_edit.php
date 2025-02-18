@@ -56,16 +56,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $type_dechet = $_POST["type_dechet"];
     $quantite_kg = $_POST["quantite_kg"];
-    $id_collecte = $_GET["id"];
 
     $stmt_dechets_collectes = $pdo->prepare("
     UPDATE dechets_collectes
     SET dechets_collectes.type_dechet = ?,
-        dechets_collectes.quantite_kg = ?,
-        dechets_collectes.id_collecte = ?
+        dechets_collectes.quantite_kg = ?
     WHERE dechets_collectes.id = ?
     ");
-    $stmt_dechets_collectes->execute([$type_dechet, $quantite_kg, $id_collecte,$collecte['collecte_id']]);
+    $stmt_dechets_collectes->execute([$type_dechet, $quantite_kg,$collecte['id']]);
     
     header("Location: collection_list.php");
     exit;
@@ -106,18 +104,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
 
     <!-- Contenu principal -->
-    <div class="flex-1 p-8 overflow-y-auto">
+    <div class="flex-1  items-center p-10 pt-10 overflow-y-auto">
         <h1 class="text-4xl font-bold text-blue-900 mb-6">Modifier une collecte</h1>
 
         <!-- Formulaire -->
-        <div class="  bg-white p-6 rounded-lg shadow-lg">
+        <div class="w-400 bg-white p-6 rounded-lg shadow-lg">
             <form method="POST" class="space-y-4 grid grid-cols-2 gap-4">
-                <div>
+                <div class = "col-span-2">
                     <label class="block text-md font-medium text-gray-700"> Date :</label>
                     <input type="date" name="date" value="<?= htmlspecialchars($collecte['date_collecte']) ?>" required
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
-                <div>
+                <div class = "col-span-2">
                     <label class="block text-md font-medium text-gray-700">Lieu :</label>
                     <input type="text" name="lieu" value="<?= htmlspecialchars($collecte['lieu']) ?>" required
                            class="w-full p-2 border border-gray-300 rounded-lg">
@@ -159,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>-->
 
-                <div>
+                <div class = "col-span-2">
                     <label class="block text-md font-medium text-gray-700">Bénévole :</label>
                     <select name="benevole" required
                             class="w-full p-2 border border-gray-300 rounded-lg">
