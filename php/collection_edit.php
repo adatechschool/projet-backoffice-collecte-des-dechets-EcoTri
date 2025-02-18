@@ -33,6 +33,10 @@ if (!$collecte) {
     header("Location: collection_list.php");
     exit;
 }
+//récupérer la liste des types déchets
+$stmt_dechets_collectes = $pdo->prepare("SELECT type_dechet,id , id_collecte FROM dechets_collectes");
+$stmt_dechets_collectes->execute();
+$type_dechets = $stmt_dechets_collectes->fetchAll();
 
 // Récupérer la liste des bénévoles
 $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
@@ -121,14 +125,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
 
-                <div>
+                <!--<div>
                     <label class="block text-md font-medium text-gray-700">Type de déchets collectés :</label>
                     <input 
                         type="text"
                         name="type_dechet"
                         value="<?= htmlspecialchars($collecte['type_dechet']) ?>" 
                            class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>-->
+
+                <div>
+                <label class="block text-md font-medium text-gray-700">Type de déchet collecté:</label>
+                <select name="type_dechet" required
+                        class="w-full p-2 border border-gray-300 rounded-lg">
+                        <option value="" disabled selected>Sélectionnez un type de déchet</option>
+                        <?php foreach ($type_dechets as $type_dechet): ?>
+                            <option value="<?= htmlspecialchars($type_dechet['type_dechet']) ?>" <?= $type_dechet['id_collecte'] == $collecte['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($type_dechet['type_dechet']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
+
                 <div>
                     <label class="block text-md font-medium text-gray-700">Quantité collectée :</label>
                     <input 
@@ -149,12 +167,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <option value="papier" >Papier</option>
                         <option value="organique" >Organique</option>
                     </select>
-                </div>
-
-                <div>
-                    <label class="block text-md font-medium text-gray-700">Quantité :</label>
-                    <input type="text" name="quantite_kg" 
-                           class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>-->
 
                 <div class = "col-span-2">
