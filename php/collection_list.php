@@ -55,9 +55,9 @@ error_reporting(E_ALL);
             <li class = "list-none"><a href="user_add.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-user-plus mr-3"></i> Ajouter un bénévole</a></li>
             <li class = "list-none"><a href="my_account.php" class="text-xl flex items-center py-5 px-3 hover:bg-blue-400 rounded-lg"><i class="fas fa-cogs mr-3"></i> Mon compte</a></li>
         <div class="mt-6">
-            <button onclick="logout()" class="text-xl w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-lg shadow-md">
-                Déconnexion
-            </button>
+        <button onclick="logout()" ><a href="login.php" class="text-xl w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-lg shadow-md"> 
+            Déconnexion </a>
+        </button>
         </div>
     </div>
 
