@@ -54,12 +54,12 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
     <!-- Contenu principal -->
     <div class="flex-1 p-8 overflow-y-auto">
         <!-- Titre -->
-        <h1 class="text-4xl font-bold text-blue-800 mb-6">Liste des Bénévoles</h1>
+        <h1 class="text-4xl font-bold text-blue-900 mb-6">Liste des Bénévoles</h1>
 
         <!-- Tableau des bénévoles -->
         <div class="overflow-hidden rounded-lg shadow-lg bg-white">
             <table class="w-full table-auto border-collapse">
-                <thead class="bg-blue-800 text-white">
+                <thead class="bg-blue-400 text-white">
                 <tr>
                     <th class="py-3 px-4 text-left">Nom</th>
                     <th class="py-3 px-4 text-left">Email</th>
@@ -80,7 +80,11 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                     <td class="py-3 px-4"><?= htmlspecialchars($benevoles['role'], ENT_QUOTES, 'UTF-8') ?></td>
                     <td class="py-3 px-4"><?= htmlspecialchars($benevoles['QTÉ_Totale'], ENT_QUOTES, 'UTF-8') ?> kg</td> <!-- Affichage de QTÉ -->
                     <td class="py-3 px-4 flex space-x-2">
+<<<<<<< HEAD
                     <a href="volunteer_edit.php?id=<?= $benevoles['id']?>" class="bg-cyan-200 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+=======
+                    <a href="volunteer_edit.php?id=<?= $benevoles['id']?>"class="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+>>>>>>> 24c1d3296c6a155b09bbd80943c88e4583df22a7
                             ✏️ Modifier
                         </a>
                         <a href="volunteer_delete.php?id=<?= $benevoles['id'] ?>"
