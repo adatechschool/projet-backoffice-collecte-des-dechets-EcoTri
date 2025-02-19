@@ -42,9 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             class="fas fa-cogs mr-3"></i> Mon compte</a></li>
 
         <div class="mt-6">
-            <button onclick="logout()" class="text-xl w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-lg shadow-md">
-                Déconnexion
-            </button>
+        <button onclick="logout()" ><a href="login.php" class="text-xl w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-lg shadow-md">
+         Déconnexion </a></button>
         </div>
     </div>
 

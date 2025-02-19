@@ -1,5 +1,4 @@
 <?php
-//session_start(); // Démarrer la session
 require 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
