@@ -48,8 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
 
     <!-- Contenu principal -->
-    <div class="flex-1 p-8 overflow-y-auto">
-        <h1 class="text-4xl font-bold text-blue-900 mb-6">Ajouter un Bénévole</h1>
+    <div class="flex-1 p-8 overflow-y-auto mt-20">
+        <h1 class="text-4xl font-bold text-blue-900 mb-6 max-w-lg mx-auto">Ajouter un Bénévole</h1>
 
         <!-- Formulaire d'ajout -->
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
