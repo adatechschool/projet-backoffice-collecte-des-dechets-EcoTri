@@ -130,9 +130,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <select name="type_dechet" required
                         class="w-full p-2 border border-gray-300 rounded-lg">
                         <option value="" disabled selected>Sélectionnez un type de déchet</option>
-
                         <?php foreach ($type_dechets as $type_dechet): ?>
-                            <option value="<?= $type_dechet['type_dechet'] ?>" <?= $type_dechet['id'] == $collecte['id'] ? 'selected' : '' ?>>
+                            <option value="<?= htmlspecialchars($type_dechet['type_dechet']) ?>" 
+                            <?= $type_dechet['type_dechet'] == $collecte['type_dechet'] ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($type_dechet['type_dechet']) ?>
                             </option>
                         <?php endforeach; ?>
